@@ -3,6 +3,7 @@ import sys
 import json
 import base64
 from openbabel import pybel
+from typing import Dict
 
 async def app(scope, receive, send):
     assert scope['type'] == 'http'
@@ -11,22 +12,28 @@ async def app(scope, receive, send):
     try:
         data = json.loads(body)
     except json.JSONDecodeError:
-        response = {
+        message = {
             'error': 'Invalid JSON'
         }
-        await send({
-            'type': 'http.response.start',
-            'status': 400,
-            'headers': [(b'content-type', b'application/json')],
-        })
-        await send({
-            'type': 'http.response.body',
-            'body': json.dumps(response).encode('utf-8'),
-        })
+        await send_response(send, 400, message)
         return
 
     fmt = data.get('fmt')
+    if fmt != 'smi':
+        message = {
+            "error": "Invalid value for 'fmt'. Expected 'smi'."
+        }
+        await send_response(send, 400, message)
+        return
+
     content = data.get('data')
+    if not content:
+        message = {
+            "error": "Missing data!"
+        }
+        await send_response(send, 400, message)
+        return
+
     mol = pybel.readstring(fmt, content)
     fp = mol.calcfp()
     response_data = json.dumps({"data": list(fp.fp)}).encode('UTF-8')
@@ -58,3 +65,15 @@ async def read_body(receive):
         more_body = message.get('more_body', False)
 
     return body
+
+async def send_response(send, status: int, message: Dict[str, str]):
+    await send({
+        'type': 'http.response.start',
+        'status': status,
+        'headers': [(b'content-type', b'application/json')],
+    })
+    await send({
+        'type': 'http.response.body',
+        'body': json.dumps(message).encode('utf-8'),
+    })
+    return
