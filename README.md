@@ -7,6 +7,12 @@ This image contains two services:
 1. Ketcher molecule editor service
 2. Fingerprinting service with OpenBabel
 
+## Build
+
+~~~
+docker build -t elabftw/chem-plugin .
+~~~
+
 ## Usage
 
 Deploy it on the same network as eLabFTW and configure eLabFTW to use this service.
