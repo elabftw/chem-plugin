@@ -16,3 +16,4 @@ WORKDIR /app
 RUN mkdir fingerprinter
 COPY src/main.py fingerprinter/main.py
 COPY fingerprinter.auto.conf /etc/supervisor/conf.d/
+COPY fingerprinter-entrypoint.sh /usr/local/bin

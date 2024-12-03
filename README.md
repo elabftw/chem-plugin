@@ -10,3 +10,7 @@ This image contains two services:
 ## Usage
 
 Deploy it on the same network as eLabFTW and configure eLabFTW to use this service.
+
+### With HTTPS
+
+Use `TLS_KEYFILE` and `TLS_CERTFILE` env vars pointing to the key/cert files.
