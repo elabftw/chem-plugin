@@ -12,7 +12,7 @@ RUN apt-get install -y --no-install-recommends \
     openbabel \
     python3-openbabel \
     python3-pip \
- && rm -rf /var/lib/apt/lists/*
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN pip install openbabel-wheel uvicorn
 WORKDIR /app
 RUN mkdir fingerprinter
