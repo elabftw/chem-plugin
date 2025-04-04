@@ -2,7 +2,7 @@
 # Fingerprinter + indigo ketcher service
 
 # This must match the version used in the app
-ARG INDIGO_VERSION=1.28.0
+ARG INDIGO_VERSION=1.29.0
 FROM epmlsop/indigo-service:$INDIGO_VERSION
 # on top of it, we add openbabel so we can do some fingerprinting
 # Note: we run an upgrade step even though it is bad practice because reducing the number of CVE is more important than having a reproducible package list
