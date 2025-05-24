@@ -34,7 +34,14 @@ async def app(scope, receive, send):
         await send_response(send, 400, message)
         return
 
-    mol = pybel.readstring(fmt, content)
+    try:
+        mol = pybel.readstring(fmt, content)
+    except OSError:
+        message = {
+            "error": "Incorrect SMILES received!"
+        }
+        await send_response(send, 400, message)
+        return
     fp = mol.calcfp()
     response_data = json.dumps({"data": list(fp.fp)}).encode('UTF-8')
 
